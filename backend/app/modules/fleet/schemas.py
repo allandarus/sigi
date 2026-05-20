@@ -58,3 +58,23 @@ class DashboardMetricsResponse(FleetBaseSchema):
     approved_reservations: int
     pending_reservations: int
     pending_next_24h: int
+
+# Reports
+class ReportDataItem(FleetBaseSchema):
+    name: str
+    count: int
+
+class ReportTableItem(FleetBaseSchema):
+    vehicle_id: str
+    plate: str
+    trip_count: int
+    km_total: int
+    status: str
+
+class ReportDataResponse(FleetBaseSchema):
+    total_agendas: int
+    by_vehicle: List[ReportDataItem]
+    by_cost_center: List[ReportDataItem]
+    by_driver: List[ReportDataItem]
+    by_period: List[ReportDataItem]
+    table_data: List[ReportTableItem]

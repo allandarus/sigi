@@ -1,6 +1,6 @@
 "use server";
 
-import { DashboardMetrics, Reservation, Vehicle, Driver } from "../schemas/fleet";
+import { DashboardMetrics, Reservation, Vehicle, Driver, ReportDataResponse } from "../schemas/fleet";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://backend:8000";
 
@@ -103,5 +103,42 @@ export async function getReservations(): Promise<Reservation[]> {
   } catch (error) {
     console.error("Reservations API error:", error);
     return [];
+  }
+}
+
+export async function getReportsData(filters?: { startDate?: string, endDate?: string, vehicleId?: number, driverId?: number }): Promise<ReportDataResponse> {
+  let url = `${API_URL}/fleet/reports`;
+  const params = new URLSearchParams();
+  if (filters?.startDate) params.append('start_date', filters.startDate);
+  if (filters?.endDate) params.append('end_date', filters.endDate);
+  if (filters?.vehicleId) params.append('vehicle_id', filters.vehicleId.toString());
+  if (filters?.driverId) params.append('driver_id', filters.driverId.toString());
+  
+  const queryString = params.toString();
+  if (queryString) {
+    url += `?${queryString}`;
+  }
+
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: getHeaders("Gestor de Logistica"),
+      cache: 'no-store', // Real-time reports
+    });
+    if (!response.ok) {
+      throw new Error(`Erro ao buscar relatórios: ${response.status}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Erro em getReportsData:", error);
+    // Return empty fallback just to prevent crashing
+    return {
+      totalAgendas: 0,
+      byVehicle: [],
+      byCostCenter: [],
+      byDriver: [],
+      byPeriod: [],
+      tableData: []
+    };
   }
 }

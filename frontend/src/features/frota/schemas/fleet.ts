@@ -50,6 +50,28 @@ export const DashboardMetricsSchema = z.object({
   pendingNext24h: z.number(),
 });
 
+export interface ReportDataItem {
+  name: string;
+  count: number;
+}
+
+export interface ReportTableItem {
+  vehicleId: string;
+  plate: string;
+  tripCount: number;
+  kmTotal: number;
+  status: string;
+}
+
+export interface ReportDataResponse {
+  totalAgendas: number;
+  byVehicle: ReportDataItem[];
+  byCostCenter: ReportDataItem[];
+  byDriver: ReportDataItem[];
+  byPeriod: ReportDataItem[];
+  tableData: ReportTableItem[];
+}
+
 export type Driver = z.infer<typeof DriverSchema>;
 export type Vehicle = z.infer<typeof VehicleSchema>;
 export type Reservation = z.infer<typeof ReservationSchema>;
