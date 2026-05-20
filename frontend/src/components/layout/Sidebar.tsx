@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   Package,
   Banknote,
@@ -20,13 +21,13 @@ import {
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
-  { label: "Almoxarifado", icon: Package, href: "#", active: true },
-  { label: "Diárias", icon: Banknote, href: "#" },
-  { label: "Frota", icon: Car, href: "#" },
-  { label: "Reserva de Espaço", icon: Building2, href: "#" },
-  { label: "Suporte", icon: Headset, href: "#" },
-  { label: "Ativos", icon: Shapes, href: "#" },
-  { label: "Configurações", icon: Settings, href: "#" },
+  { label: "Almoxarifado", icon: Package, href: "/almoxarifado" },
+  { label: "Diárias", icon: Banknote, href: "/diarias" },
+  { label: "Frota", icon: Car, href: "/frota" },
+  { label: "Reserva de Espaço", icon: Building2, href: "/reserva-de-espaco" },
+  { label: "Suporte", icon: Headset, href: "/suporte" },
+  { label: "Ativos", icon: Shapes, href: "/ativos" },
+  { label: "Configurações", icon: Settings, href: "/configuracoes" },
 ];
 
 export function Sidebar({ 
@@ -36,6 +37,8 @@ export function Sidebar({
   isCollapsed: boolean; 
   setIsCollapsed: (v: boolean) => void; 
 }) {
+  const pathname = usePathname();
+
   return (
     <aside
       className={cn(
@@ -79,7 +82,7 @@ export function Sidebar({
                   href={item.href}
                   className={cn(
                     "flex items-center gap-3 px-3 py-2 rounded-lg font-semibold transition-all group",
-                    item.active
+                    pathname.startsWith(item.href) && item.href !== "#"
                       ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border-l-2 border-blue-600"
                       : "text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800"
                   )}
@@ -99,21 +102,6 @@ export function Sidebar({
       </nav>
 
       <div className="p-4 mt-auto">
-        <button
-          className={cn(
-            "w-full bg-primary hover:bg-on-primary-fixed-variant text-on-primary rounded-lg py-2.5 flex items-center justify-center gap-2 shadow-sm transition-colors mb-4",
-            isCollapsed ? "px-0" : "px-4"
-          )}
-          title={isCollapsed ? "Novo Chamado" : undefined}
-        >
-          <Plus size={20} className="shrink-0" aria-hidden="true" />
-          {!isCollapsed && (
-            <span className="font-semibold text-sm whitespace-nowrap">
-              Novo Chamado
-            </span>
-          )}
-        </button>
-
         <ul className="space-y-1">
           <li>
             <Link

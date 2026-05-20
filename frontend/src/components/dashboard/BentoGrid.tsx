@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { Package, Banknote, Car, Headset, Shapes, Building2, TrendingUp, AlertTriangle } from "lucide-react";
 
 interface KPICardProps {
@@ -13,11 +14,12 @@ interface KPICardProps {
   };
   colorClass: string;
   iconBgClass: string;
+  href?: string;
 }
 
-function KPICard({ title, icon, value, subtitle, trend, colorClass, iconBgClass }: KPICardProps) {
-  return (
-    <div className="bg-surface rounded-xl p-5 border border-outline-variant/30 relative overflow-hidden group">
+function KPICard({ title, icon, value, subtitle, trend, colorClass, iconBgClass, href }: KPICardProps) {
+  const content = (
+    <div className="bg-surface rounded-xl p-5 border border-outline-variant/30 relative overflow-hidden group hover:shadow-md transition-shadow cursor-pointer h-full">
       <div className={`absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity ${colorClass}`}>
         {icon}
       </div>
@@ -44,6 +46,11 @@ function KPICard({ title, icon, value, subtitle, trend, colorClass, iconBgClass 
       </div>
     </div>
   );
+
+  if (href) {
+    return <Link href={href} className="block h-full">{content}</Link>;
+  }
+  return content;
 }
 
 export function BentoGrid() {
@@ -73,6 +80,7 @@ export function BentoGrid() {
         subtitle="Veículos reservados hoje"
         colorClass="text-on-surface"
         iconBgClass="bg-tertiary-fixed text-on-tertiary-fixed"
+        href="/frota"
       />
       <KPICard
         title="Suporte"

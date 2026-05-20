@@ -2,21 +2,31 @@
 
 import { DashboardMetrics, Reservation, Vehicle, Driver } from "../schemas/fleet";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://backend:8000/api/v1";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://backend:8000";
+
+// Headers padrão para testes (Mock de autenticação baseada em roles)
+const getHeaders = (role: string = "Gestor de Logistica") => ({
+  "Content-Type": "application/json",
+  "role": role,
+});
 
 // Dashboard
 export async function getDashboardMetrics(): Promise<DashboardMetrics> {
   try {
-    const res = await fetch(`${API_URL}/fleet/dashboard`, { next: { revalidate: 60 } });
+    const res = await fetch(`${API_URL}/fleet/reservations/metrics`, { 
+      headers: getHeaders("Gestor de Logistica"),
+      cache: 'no-store'
+    });
     if (!res.ok) throw new Error("Failed to fetch dashboard metrics");
     return res.json();
   } catch (error) {
-    console.warn("Using mock data for dashboard metrics", error);
+    console.error("Dashboard metrics API error:", error);
+    // Fallback minimal just in case
     return {
-      totalReservations: 145,
-      approvedReservations: 112,
-      pendingReservations: 33,
-      pendingNext24h: 5,
+      totalReservations: 0,
+      approvedReservations: 0,
+      pendingReservations: 0,
+      pendingNext24h: 0,
     };
   }
 }
@@ -24,78 +34,74 @@ export async function getDashboardMetrics(): Promise<DashboardMetrics> {
 // Drivers
 export async function getDrivers(): Promise<Driver[]> {
   try {
-    const res = await fetch(`${API_URL}/fleet/drivers`, { next: { tags: ['drivers'] } });
+    const res = await fetch(`${API_URL}/fleet/drivers`, { 
+      headers: getHeaders("Gestor de Logistica"),
+      cache: 'no-store'
+    });
     if (!res.ok) throw new Error("Failed to fetch drivers");
     return res.json();
   } catch (error) {
-    console.warn("Using mock data for drivers", error);
-    return [
-      { id: 1, name: "André Souza", registrationNumber: "445.890", costCenter: "Logística SP" },
-      { id: 2, name: "Marcos Lima", registrationNumber: "112.334", costCenter: "Distribuição MG" },
-      { id: 3, name: "Renata Carvalho", registrationNumber: "552.122", costCenter: "Operações RJ" },
-      { id: 4, name: "Bruno Ferreira", registrationNumber: "887.654", costCenter: "Logística SP" },
-    ];
+    console.error("Drivers API error:", error);
+    return [];
   }
 }
 
 export async function createDriver(data: Driver): Promise<Driver> {
-  // Try real create
-  try {
-    const res = await fetch(`${API_URL}/fleet/drivers`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-    if (!res.ok) throw new Error("Failed to create driver");
-    return res.json();
-  } catch (error) {
-    console.warn("Mocking driver creation", error);
-    return { ...data, id: Math.floor(Math.random() * 1000) };
-  }
+  const res = await fetch(`${API_URL}/fleet/drivers`, {
+    method: "POST",
+    headers: getHeaders("Gestor de Logistica"),
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error("Failed to create driver");
+  return res.json();
 }
 
 // Vehicles
 export async function getVehicles(): Promise<Vehicle[]> {
   try {
-    const res = await fetch(`${API_URL}/fleet/vehicles`, { next: { tags: ['vehicles'] } });
+    const res = await fetch(`${API_URL}/fleet/vehicles`, { 
+      headers: getHeaders("Gestor de Logistica"),
+      cache: 'no-store'
+    });
     if (!res.ok) throw new Error("Failed to fetch vehicles");
     return res.json();
   } catch (error) {
-    console.warn("Using mock data for vehicles", error);
-    return [
-      { id: 1, brand: "Toyota", modelName: "Corolla", manufactureYear: 2022, modelYear: 2023, initialMileage: 15000 },
-      { id: 2, brand: "Chevrolet", modelName: "Onix", manufactureYear: 2023, modelYear: 2024, initialMileage: 5000 },
-    ];
+    console.error("Vehicles API error:", error);
+    return [];
   }
 }
 
 export async function createVehicle(data: Vehicle): Promise<Vehicle> {
-  try {
-    const res = await fetch(`${API_URL}/fleet/vehicles`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-    if (!res.ok) throw new Error("Failed to create vehicle");
-    return res.json();
-  } catch (error) {
-    console.warn("Mocking vehicle creation", error);
-    return { ...data, id: Math.floor(Math.random() * 1000) };
-  }
+  const res = await fetch(`${API_URL}/fleet/vehicles`, {
+    method: "POST",
+    headers: getHeaders("Gestor de Logistica"),
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error("Failed to create vehicle");
+  return res.json();
 }
 
 // Reservations
 export async function createReservation(data: Reservation): Promise<Reservation> {
+  const res = await fetch(`${API_URL}/fleet/reservations`, {
+    method: "POST",
+    headers: getHeaders("Trabalhador FESF"), // Requerido para criar
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error("Failed to create reservation");
+  return res.json();
+}
+
+export async function getReservations(): Promise<Reservation[]> {
   try {
-    const res = await fetch(`${API_URL}/fleet/reservations`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
+    const res = await fetch(`${API_URL}/fleet/reservations`, { 
+      headers: getHeaders("Gestor de Logistica"),
+      cache: 'no-store'
     });
-    if (!res.ok) throw new Error("Failed to create reservation");
+    if (!res.ok) throw new Error("Failed to fetch reservations");
     return res.json();
   } catch (error) {
-    console.warn("Mocking reservation creation", error);
-    return { ...data, id: Math.floor(Math.random() * 1000), status: "PENDING" };
+    console.error("Reservations API error:", error);
+    return [];
   }
 }
