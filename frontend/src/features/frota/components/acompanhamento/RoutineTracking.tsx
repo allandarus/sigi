@@ -8,7 +8,18 @@ import { ChevronLeft, ChevronRight, History, Edit2, Filter } from "lucide-react"
 
 function DailyAgenda() {
   const timeSlots = ["08h", "10h", "12h", "14h", "16h"];
-  const vehicles = [
+  const vehicles: {
+    id: string;
+    name: string;
+    bookings: {
+      start: number;
+      span: number;
+      label: string;
+      driver?: string;
+      isDone?: boolean;
+      isFree?: boolean;
+    }[];
+  }[] = [
     { id: "v1", name: "ABC-1234 (SUV)", bookings: [{ start: 0, span: 2, label: "Entrega Setor Sul", driver: "João P." }, { start: 3, span: 2, label: "Manutenção Prev." }] },
     { id: "v2", name: "XYZ-5678 (Sedan)", bookings: [{ start: 2, span: 2, label: "Viagem Executiva", driver: "Maria L." }] },
     { id: "v3", name: "KJH-9012 (Van)", bookings: [{ start: 0, span: 2, label: "Transporte Equipe", driver: "Finalizado", isDone: true }, { start: 3, span: 2, label: "Disponível", isFree: true }] },

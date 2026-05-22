@@ -24,12 +24,20 @@ export default async function FrotaDashboardPage(props: { searchParams: Promise<
         
         <div className="flex flex-wrap gap-3">
           {role === 'gestor' && (
-            <Link
-              href="/frota/cadastros"
-              className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 border border-border bg-surface hover:bg-background text-text-heading shadow-sm"
-            >
-              Cadastros (Veículos/Motoristas)
-            </Link>
+            <>
+              <Link
+                href="/frota/cadastros"
+                className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 border border-border bg-surface hover:bg-background text-text-heading shadow-sm"
+              >
+                Cadastros (Veículos/Motoristas)
+              </Link>
+              <Link
+                href="/frota/relatorios"
+                className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2 border border-border bg-surface hover:bg-background text-text-heading shadow-sm"
+              >
+                Relatórios
+              </Link>
+            </>
           )}
           <Link
             href="/frota/acompanhamento"

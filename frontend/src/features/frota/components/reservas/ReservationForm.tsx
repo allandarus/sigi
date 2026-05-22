@@ -15,7 +15,8 @@ export function ReservationForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   const { register, control, handleSubmit, formState: { errors }, reset } = useForm<Reservation>({
-    resolver: zodResolver(ReservationSchema),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resolver: zodResolver(ReservationSchema) as any,
     defaultValues: {
       origin: "",
       destinations: [{ destination: "" }],

@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { RoutineTracking } from "@/features/frota/components/acompanhamento/RoutineTracking";
 
 export default function AcompanhamentoPage() {
@@ -7,7 +8,7 @@ export default function AcompanhamentoPage() {
       <div className="flex justify-between items-end mb-8">
         <div>
           <div className="flex items-center gap-2 text-sm text-text-muted mb-2">
-            <span>Frota</span>
+            <Link href="/frota" className="hover:text-primary transition-colors">Frota</Link>
             <span>/</span>
             <span className="text-primary font-medium">Acompanhamento de Rotinas</span>
           </div>

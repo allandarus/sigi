@@ -72,7 +72,8 @@ export function DriverForm() {
 
             <div className="space-y-2">
               <Label htmlFor="costCenter" className="text-text-muted">Centro de Custo</Label>
-              <Select onValueChange={(value) => setValue("costCenter", value)}>
+              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+              <Select onValueChange={(value: any) => setValue("costCenter", value ?? "")}>
                 <SelectTrigger className={`bg-white border-border ${errors.costCenter ? 'border-status-danger' : ''}`}>
                   <SelectValue placeholder="Selecione..." />
                 </SelectTrigger>

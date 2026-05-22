@@ -1,4 +1,5 @@
 import React, { Suspense } from "react";
+import Link from "next/link";
 import { CadastrosTabs } from "@/features/frota/components/cadastros/CadastrosTabs";
 import { getDrivers } from "@/features/frota/api/actions";
 
@@ -13,7 +14,7 @@ export default function CadastrosPage() {
       <div className="flex justify-between items-end mb-8">
         <div>
           <div className="flex items-center gap-2 text-sm text-text-muted mb-2">
-            <span>Frota</span>
+            <Link href="/frota" className="hover:text-primary transition-colors">Frota</Link>
             <span>/</span>
             <span className="text-primary font-medium">Gestão de Cadastros</span>
           </div>

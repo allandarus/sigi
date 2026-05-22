@@ -16,7 +16,8 @@ export function VehicleForm({ drivers }: { drivers: Driver[] }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   const { register, handleSubmit, formState: { errors }, reset, setValue } = useForm<Vehicle>({
-    resolver: zodResolver(VehicleSchema),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    resolver: zodResolver(VehicleSchema) as any,
     defaultValues: {
       brand: "",
       modelName: "",
@@ -114,7 +115,8 @@ export function VehicleForm({ drivers }: { drivers: Driver[] }) {
 
             <div className="space-y-2">
               <Label htmlFor="driverId" className="text-text-muted">Motorista Principal (Opcional)</Label>
-              <Select onValueChange={(value) => setValue("driverId", parseInt(value))}>
+              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+              <Select onValueChange={(value: any) => setValue("driverId", parseInt(value))}>
                 <SelectTrigger className={`bg-white border-border ${errors.driverId ? 'border-status-danger' : ''}`}>
                   <SelectValue placeholder="Selecione o motorista responsável..." />
                 </SelectTrigger>

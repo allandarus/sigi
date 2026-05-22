@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { getReportsData, getVehicles, getDrivers } from "@/features/frota/api/actions";
 import { ReportsDashboard } from "@/features/frota/components/relatorios/ReportsDashboard";
 import { FileText, Download } from "lucide-react";
@@ -24,6 +25,11 @@ export default async function RelatoriosPage(props: { searchParams: Promise<{ [k
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-4">
         <div>
+          <div className="flex items-center gap-2 text-sm text-text-muted mb-2">
+            <Link href="/frota" className="hover:text-primary transition-colors">Frota</Link>
+            <span>/</span>
+            <span className="text-primary font-medium">Relatórios</span>
+          </div>
           <h2 className="font-heading-start text-heading-start text-text-heading mb-1">
             Relatórios de Frota
           </h2>
